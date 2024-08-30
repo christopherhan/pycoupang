@@ -7,7 +7,7 @@ PyCoupang is a Python client library for the Coupang WING API. It provides a sim
 Install PyCoupang using pip:
 
 ```bash
-pip install pycoupang
+pip install python-coupang
 ```
 
 ## Usage

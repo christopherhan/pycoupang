@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "python-coupang"
+version = "0.1.0"
+description = "A Python client for the Coupang API"
+readme = "README.md"
+authors = [{name = "Chris Han"}]
+license = {file = "LICENSE"}
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+]
+keywords = ["coupang", "api", "client"]
+dependencies = [
+    "requests>=2.25.1",
+    "pytest>=6.2.3",
+    "python-dotenv>=0.19.0",
+]
+requires-python = ">=3.6"
+
+[project.urls]
+Homepage = "https://github.com/christopherhan/python-coupang"
+
+[tool.setuptools.packages.find]
+include = ["pycoupang", "pycoupang.*"]
+
+[tool.setuptools.package-data]
+tests = ["unit/*", "integration/*", "mock_data/*"]
