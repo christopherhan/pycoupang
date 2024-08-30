@@ -19,80 +19,77 @@ class TestProductAPIIntegration(unittest.TestCase):
         cls.client = CoupangClient(base_url, access_key, secret_key, vendor_id)
         cls.created_product_id = None
 
+    def assert_success_response(self, response, message=""):
+        try:
+            self.assertIn('code', response, f"Response does not contain 'code' key. {message}")
+            self.assertEqual(response['code'], 'SUCCESS', f"Response code is not 'SUCCESS'. {message}")
+        except AssertionError as e:
+            print(f"API Response: {response}")
+            raise e
+
     def test_01_create_product(self):
         response = self.client.products.create(CREATE_PRODUCT_DATA)
-        self.assertIn('code', response)
-        self.assertEqual(response['code'], 'SUCCESS')
-        self.assertIn('data', response)
-        self.assertIn('productId', response['data'])
+        self.assert_success_response(response, "Failed to create product")
+        self.assertIn('data', response, "Response does not contain 'data' key")
+        self.assertIn('productId', response['data'], "Response data does not contain 'productId'")
         TestProductAPIIntegration.created_product_id = response['data']['productId']
 
     def test_02_get_product(self):
         if not TestProductAPIIntegration.created_product_id:
             self.skipTest("No product created to test")
         response = self.client.products.get(TestProductAPIIntegration.created_product_id)
-        self.assertIn('code', response)
-        self.assertEqual(response['code'], 'SUCCESS')
+        self.assert_success_response(response, f"Failed to get product {TestProductAPIIntegration.created_product_id}")
 
     def test_03_request_approval(self):
         if not TestProductAPIIntegration.created_product_id:
             self.skipTest("No product created to test")
         response = self.client.products.request_approval(TestProductAPIIntegration.created_product_id)
-        self.assertIn('code', response)
-        self.assertEqual(response['code'], 'SUCCESS')
+        self.assert_success_response(response, f"Failed to request approval for product {TestProductAPIIntegration.created_product_id}")
 
-    def test_04_delete_product(self):
-        if not TestProductAPIIntegration.created_product_id:
-            self.skipTest("No product created to test")
-        response = self.client.products.delete(TestProductAPIIntegration.created_product_id)
-        self.assertIn('code', response)
-        self.assertEqual(response['code'], 'SUCCESS')
-        TestProductAPIIntegration.created_product_id = None
-
-    def test_05_get_item_quantities(self):
+    def test_04_get_item_quantities(self):
         if not TestProductAPIIntegration.created_product_id:
             self.skipTest("No product created to test")
         
-        # Assuming the created_product_id is also the vendor_item_id
         vendor_item_id = TestProductAPIIntegration.created_product_id
         response = self.client.products.get_item_quantities(vendor_item_id)
         
-        self.assertIn('code', response)
-        self.assertEqual(response['code'], 'SUCCESS')
-        self.assertIn('data', response)
-        self.assertIn('items', response['data'])
-        self.assertGreater(len(response['data']['items']), 0)
+        self.assert_success_response(response, f"Failed to get item quantities for {vendor_item_id}")
+        self.assertIn('data', response, "Response does not contain 'data' key")
+        self.assertIn('items', response['data'], "Response data does not contain 'items'")
+        self.assertGreater(len(response['data']['items']), 0, "No items returned")
 
-    def test_06_get_product_summary(self):
+    def test_05_get_product_summary(self):
         if not TestProductAPIIntegration.created_product_id:
             self.skipTest("No product created to test")
         
-        # Assuming we can get the external_vendor_sku_code from the created product
-        # You might need to adjust this based on how you're storing or retrieving this information
-        external_vendor_sku_code = "VENDOR_SKU_123"  # Replace with actual code if available
+        external_vendor_sku_code = CREATE_PRODUCT_DATA['items'][0]['externalVendorSku']
         
         response = self.client.products.get_product_summary(external_vendor_sku_code)
         
-        self.assertIn('code', response)
-        self.assertEqual(response['code'], 'SUCCESS')
-        self.assertIn('data', response)
-        # Add more specific assertions based on the expected response structure
+        self.assert_success_response(response, f"Failed to get product summary for {external_vendor_sku_code}")
+        self.assertIn('data', response, "Response does not contain 'data' key")
 
-    def test_07_list_products(self):
+    def test_06_list_products(self):
         vendor_id = os.getenv('COUPANG_VENDOR_ID')
         if not vendor_id:
             self.skipTest("COUPANG_VENDOR_ID not set in environment variables")
         
         response = self.client.products.list_products(
             vendor_id=vendor_id,
-            max_per_page=10
+            maxPerPage=10
         )
         
-        self.assertIn('code', response)
-        self.assertEqual(response['code'], 'SUCCESS')
-        self.assertIn('data', response)
-        self.assertIn('products', response['data'])
-        self.assertLessEqual(len(response['data']['products']), 10)
+        self.assert_success_response(response, f"Failed to list products for vendor {vendor_id}")
+        self.assertIn('data', response, "Response does not contain 'data' key")
+        self.assertIn('products', response['data'], "Response data does not contain 'products'")
+        self.assertLessEqual(len(response['data']['products']), 10, "More than 10 products returned")
+
+    def test_07_delete_product(self):
+        if not TestProductAPIIntegration.created_product_id:
+            self.skipTest("No product created to test")
+        response = self.client.products.delete(TestProductAPIIntegration.created_product_id)
+        self.assert_success_response(response, f"Failed to delete product {TestProductAPIIntegration.created_product_id}")
+        TestProductAPIIntegration.created_product_id = None
 
     @classmethod
     def tearDownClass(cls):

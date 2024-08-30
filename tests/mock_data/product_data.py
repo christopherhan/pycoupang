@@ -3,7 +3,7 @@
 CREATE_PRODUCT_DATA = {
     "displayCategoryCode": 56137,
     "sellerProductName": "test_클렌징오일_관리용_상품명",
-    "vendorId": "A00012345",
+    "vendorId": "***REMOVED***",
     "saleStartedAt": "2017-11-30T00:00:00",
     "saleEndedAt": "2099-01-01T23:59:59",
     "displayProductName": "해피바스 솝베리 클렌징 오일",
