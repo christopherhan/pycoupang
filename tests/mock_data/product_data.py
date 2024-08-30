@@ -1,9 +1,17 @@
-# Mock product data for testing
+import os
+from dotenv import load_dotenv
 
+# Load environment variables
+load_dotenv()
+
+# Get the vendor ID from the environment variable
+VENDOR_ID = os.getenv('COUPANG_VENDOR_ID')
+
+# Mock product data for testing
 CREATE_PRODUCT_DATA = {
     "displayCategoryCode": 56137,
     "sellerProductName": "test_클렌징오일_관리용_상품명",
-    "vendorId": "***REMOVED***",
+    "vendorId": VENDOR_ID,  # Use the environment variable here
     "saleStartedAt": "2017-11-30T00:00:00",
     "saleEndedAt": "2099-01-01T23:59:59",
     "displayProductName": "해피바스 솝베리 클렌징 오일",
