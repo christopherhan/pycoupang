@@ -12,7 +12,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/yourusername/pycoupang",
-    packages=find_packages(),
+    packages=find_packages(include=['pycoupang', 'pycoupang.*', 'tests']),
     install_requires=[
         "requests>=2.25.1",
     ],
