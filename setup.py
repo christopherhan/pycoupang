@@ -12,9 +12,11 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/yourusername/pycoupang",
-    packages=find_packages(include=['pycoupang', 'pycoupang.*', 'tests']),
+    packages=find_packages(include=['pycoupang', 'pycoupang.*']),
+    package_data={"tests": ["unit/*", "integration/*", "mock_data/*"]},
     install_requires=[
         "requests>=2.25.1",
+        "python-dotenv>=0.19.0",
     ],
     classifiers=[
         "Development Status :: 3 - Alpha",
