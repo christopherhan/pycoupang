@@ -1,7 +1,7 @@
 from typing import Dict, Any, List, Optional
+from .base import BaseAPI
 
-
-class ProductAPI:
+class ProductAPI(BaseAPI):
     SELLER_PRODUCTS_ENDPOINT = "v2/providers/seller_api/apis/api/v1/marketplace/seller-products"
     VENDOR_ITEMS_ENDPOINT = "v2/providers/seller_api/apis/api/v1/marketplace/vendor-items"
 
@@ -97,5 +97,5 @@ class ProductAPI:
         Returns:
             Dict[str, Any]: The response from the Coupang API containing the list of products.
         """
-        params = {"vendorId": vendor_id, **{k: v for k, v in kwargs.items() if v is not None}}
+        params = {"vendorId": vendor_id, **self._process_kwargs(**kwargs)}
         return self.client._request("GET", self.SELLER_PRODUCTS_ENDPOINT, params=params)

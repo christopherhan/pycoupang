@@ -11,28 +11,36 @@ class CoupangClient:
         self.base_url = base_url
         self.access_key = access_key
         self.secret_key = secret_key
+        self.vendor_id = vendor_id
         self.session = requests.Session()
-
         self.products = ProductAPI(self)
 
-    def _generate_signature(self, method, path, timestamp):
-        message = f"{method}\n{path}\n{timestamp}"
+    def _generate_signature(self, method, path, query_string=None):
+        datetime_string = datetime.utcnow().strftime('%y%m%dT%H%M%SZ')
+
+        message = datetime_string + method + path + (query_string or "")
+
         signature = hmac.new(
             self.secret_key.encode('utf-8'),
             message.encode('utf-8'),
             hashlib.sha256
-        ).digest()
-        return base64.b64encode(signature).decode('utf-8')
+        ).hexdigest()
+
+        return f"CEA algorithm=HmacSHA256, access-key={self.access_key}, signed-date={datetime_string}, signature={signature}"
 
     def _request(self, method, endpoint, **kwargs):
         url = f"{self.base_url}/{endpoint}"
-        timestamp = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
-        signature = self._generate_signature(method, f"/{endpoint}", timestamp)
+        query_string = None
+
+        if 'params' in kwargs:
+            query_string = '&'.join([f"{k}={v}" for k, v in kwargs['params'].items()])
+
+        authorization = self._generate_signature(method, f"/{endpoint}", query_string)
 
         headers = {
-            "X-COUPANG-ACCESS-KEY": self.access_key,
-            "X-COUPANG-TIMESTAMP": timestamp,
-            "X-COUPANG-SIGNATURE": signature,
+            "Content-type": "application/json;charset=UTF-8",
+            "Authorization": authorization,
+            "X-EXTENDED-TIMEOUT": "90000"
         }
         self.session.headers.update(headers)
 
@@ -53,5 +61,5 @@ if __name__ == "__main__":
         raise ValueError("Missing required environment variables: COUPANG_BASE_URL, COUPANG_ACCESS_KEY, COUPANG_SECRET_KEY, COUPANG_VENDOR_ID")
 
     client = CoupangClient(base_url, access_key, secret_key, vendor_id)
-    response = client.get("users")
+    response = client.products.list_products(vendor_id=vendor_id)
     print(response)
