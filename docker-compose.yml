@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  pycoupang:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - COUPANG_BASE_URL=https://api-gateway.coupang.com
+      - COUPANG_ACCESS_KEY=${COUPANG_ACCESS_KEY}
+      - COUPANG_SECRET_KEY=${COUPANG_SECRET_KEY}
+      - COUPANG_VENDOR_ID=${COUPANG_VENDOR_ID}
+    volumes:
+      - ./pycoupang:/app/pycoupang
+    command: python -m pycoupang.client
