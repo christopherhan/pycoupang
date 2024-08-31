@@ -11,6 +11,7 @@ class ProductAPI(BaseAPI):
     def create(self, product_data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Create a new product on Coupang Marketplace.
+        Coupang URL_API_NAME: CREATE_PRODUCT
 
         Args:
             product_data (Dict[str, Any]): A dictionary containing the product information.
@@ -23,6 +24,7 @@ class ProductAPI(BaseAPI):
     def get(self, product_id: str) -> Dict[str, Any]:
         """
         Retrieve a product from Coupang Marketplace by its ID.
+        Coupang URL_API_NAME: GET_PRODUCT_BY_PRODUCT_ID
 
         Args:
             product_id (str): The ID of the product to retrieve.
@@ -36,6 +38,7 @@ class ProductAPI(BaseAPI):
     def request_approval(self, product_id: str) -> Dict[str, Any]:
         """
         Request approval for a product on Coupang Marketplace.
+        Coupang URL_API_NAME: APPROVE_PRODUCT
 
         Args:
             product_id (str): The ID of the product to request approval for.
@@ -49,6 +52,7 @@ class ProductAPI(BaseAPI):
     def delete(self, product_id: str) -> Dict[str, Any]:
         """
         Delete a product from Coupang Marketplace.
+        Coupang URL_API_NAME: DELETE_PRODUCT
 
         Args:
             product_id (str): The ID of the product to delete.
@@ -62,6 +66,7 @@ class ProductAPI(BaseAPI):
     def get_item_quantities(self, vendor_item_id: str) -> Dict[str, Any]:
         """
         Query quantity, price, and status for a single product item.
+        Coupang URL_API_NAME: GET_PRODUCT_QUANTITY_PRICE_STATUS 
 
         Args:
             vendor_item_id (str): The vendor item ID to query.
@@ -75,6 +80,7 @@ class ProductAPI(BaseAPI):
     def get_product_summary(self, external_vendor_sku_code: str) -> Dict[str, Any]:
         """
         Query a summary of product info by external vendor SKU code.
+        Coupang URL_API_NAME: GET_PRODUCT_BY_EXTERNAL_SKU
 
         Args:
             external_vendor_sku_code (str): The external vendor SKU code of the product.
@@ -88,6 +94,7 @@ class ProductAPI(BaseAPI):
     def list_products(self, vendor_id: str, **kwargs) -> Dict[str, Any]:
         """
         Query a list of products with paging.
+        Coupang URL_API_NAME: GET_PRODUCTS_BY_QUERY 
 
         Args:
             vendor_id (str): The vendor ID.

@@ -5,15 +5,17 @@ import base64
 from datetime import datetime
 import os
 from .product import ProductAPI
+from .logistics import LogisticsAPI
 
 class CoupangClient:
-    def __init__(self, base_url, access_key, secret_key, vendor_id):
-        self.base_url = base_url
+    def __init__(self, access_key, secret_key, vendor_id, base_url=None):
         self.access_key = access_key
         self.secret_key = secret_key
         self.vendor_id = vendor_id
+        self.base_url = base_url or os.getenv('COUPANG_BASE_URL', 'https://api-gateway.coupang.com')
         self.session = requests.Session()
         self.products = ProductAPI(self)
+        self.logistics = LogisticsAPI(self)
 
     def _generate_signature(self, method, path, query_string=None):
         datetime_string = datetime.utcnow().strftime('%y%m%dT%H%M%SZ')
@@ -40,7 +42,6 @@ class CoupangClient:
         headers = {
             "Content-type": "application/json;charset=UTF-8",
             "Authorization": authorization,
-            "X-EXTENDED-TIMEOUT": "90000"
         }
         self.session.headers.update(headers)
 

@@ -39,7 +39,7 @@ import os
 from dotenv import load_dotenv
 from pycoupang.client import CoupangClient
 
-# load environment variables
+# Optionally load environment variables if using .env file
 load_dotenv()
 
 client = CoupangClient(
