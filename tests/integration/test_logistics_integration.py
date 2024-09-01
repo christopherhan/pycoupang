@@ -2,7 +2,7 @@ import unittest
 import os
 from pycoupang.client import CoupangClient
 from pycoupang.logistics import LogisticsAPI
-from tests.mock_data.location_data import SHIPPING_LOCATION_DATA, RETURN_LOCATION_DATA
+from tests.mock_data.location_data import SHIPPING_LOCATION_DATA, RETURN_LOCATION_DATA_DOMESTIC
 
 class TestLogisticsAPIIntegration(unittest.TestCase):
     @classmethod
@@ -22,7 +22,7 @@ class TestLogisticsAPIIntegration(unittest.TestCase):
         self.assertIn("success", response)
 
     def test_create_return_location_integration(self):
-        response = self.logistics_api.create_return_location(RETURN_LOCATION_DATA)
+        response = self.logistics_api.create_return_location(RETURN_LOCATION_DATA_DOMESTIC)
         self.assertIn("success", response)
 
 if __name__ == '__main__':

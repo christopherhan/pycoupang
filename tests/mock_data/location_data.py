@@ -29,7 +29,7 @@ SHIPPING_LOCATION_DATA = {
     ]
 }
 
-RETURN_LOCATION_DATA = {
+RETURN_LOCATION_DATA_DOMESTIC = {
     "vendorId": VENDOR_ID, 
     "userId": USER_ID,
     "shippingPlaceName": "Test_Return_Location",
