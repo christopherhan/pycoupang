@@ -61,8 +61,6 @@ class CoupangClient:
         response.raise_for_status()
         return response.json()
 
-    # ... rest of the methods (get, post, put, delete) remain the same ...
-
 # Usage example
 if __name__ == "__main__":
     base_url = os.environ.get(
